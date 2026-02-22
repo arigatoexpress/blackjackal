@@ -1,0 +1,51 @@
+# Runtime artifacts - NEVER commit these
+runtime/
+*.pma
+*.db
+*.db-journal
+Local State
+Last Version
+First Run
+
+# Chrome profile data
+Default/
+Safe Browsing/
+CertificateRevocation/
+ShaderCache/
+GraphiteDawnCache/
+GrShaderCache/
+component_crx_cache/
+extensions_crx_cache/
+optimization_guide_model_store/
+segmentation_platform/
+
+# Node/npm artifacts (if using)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python artifacts (if using)
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
