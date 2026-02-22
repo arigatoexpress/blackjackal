@@ -26,8 +26,9 @@ This Chrome profile workspace is **not** committed to git. Use the sync script t
 
 1. Source code lives in `src/` - this is version controlled
 2. Chrome profile data lives in the local workspace - **never** commit this
-3. Use `scripts/sync_runtime.sh` to extract relevant state from Chrome workspace
-4. Use `scripts/setup_dev.sh` to initialize a fresh development environment
+3. Use `make sync` to extract relevant state from Chrome workspace
+4. Use `make setup` to initialize a fresh development environment
+5. Use `make verify` to verify project structure and environment
 
 ## Quick Start
 
@@ -35,8 +36,37 @@ This Chrome profile workspace is **not** committed to git. Use the sync script t
 # Clone and setup
 git clone https://github.com/arigatoexpress/blackjackal.git
 cd blackjackal
-./scripts/setup_dev.sh
+make setup
+
+# Verify everything is in place
+make verify
 
 # Sync runtime state from Chrome workspace
-./scripts/sync_runtime.sh
+make sync
 ```
+
+## Available Make Targets
+
+| Target | Description |
+|--------|-------------|
+| `make setup` | Initialize development environment |
+| `make sync` | Sync runtime state from Chrome workspace |
+| `make verify` | Verify project structure and environment |
+| `make check-env` | Check environment prerequisites |
+| `make clean` | Clean runtime artifacts (safe) |
+| `make help` | Show available targets |
+
+## Configuration
+
+Environment variables:
+- `BLACKJACKAL_CHROME_PATH` - Override default Chrome workspace path
+
+Configuration file:
+- `config/chrome-workspace.conf` - Workspace and sync settings
+
+## Reproducibility
+
+This project uses deterministic build targets via Makefile:
+- `make setup` is idempotent - can be run multiple times safely
+- `make verify` validates all expected directories and files
+- `make sync` produces consistent output structure given the same input
