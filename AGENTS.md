@@ -1,35 +1,39 @@
 # Blackjackal — Agent Notes
 
-## What This Is
+A reproducible development workspace for Chrome extension projects. Keeps source code version-controlled while ensuring sensitive browser profile data never reaches git.
 
-Chrome extension + automation toolkit. Source in `src/`, runtime state synced from local Chrome workspace.
+## What this repo does
 
-## Key Paths
+Blackjackal separates Chrome extension source code (`src/`) from local Chrome runtime state (`.blackjackal-chrome/`). It provides Makefile targets and bash scripts for setup, verification, and safe metadata sync.
+
+## Key directories and files
 
 | Path | Purpose |
 |------|---------|
-| `src/` | Extension source code (committed) |
-| `scripts/` | Automation utilities |
-| `config/` | Configuration templates |
-| `runtime/` | Chrome profile state (gitignored) |
+| `src/` | Extension source code (version controlled) |
+| `scripts/` | Bash automation: `setup_dev.sh`, `sync_runtime.sh` |
+| `config/chrome-workspace.conf` | Workspace path, allowed/blocked sync paths, sync mode |
+| `Makefile` | Deterministic targets: `setup`, `sync`, `verify`, `clean`, `check-env` |
+| `docs/` | Project documentation |
 | `tests/` | Test suites |
-| `Makefile` | Build targets |
+| `runtime/` | Gitignored local runtime state synced from Chrome workspace |
 
-## Dev Commands
+## How to run / develop
 
 ```bash
-make setup    # Initialize dev environment
-make sync     # Sync from Chrome workspace
-make verify   # Validate structure
-make clean    # Clean runtime artifacts
+make setup      # Initialize dirs and check Chrome workspace
+make verify     # Validate structure and permissions
+make sync       # Sync safe metadata from Chrome workspace
+make clean      # Remove generated artifacts (preserves runtime/)
 ```
 
-## Safety Boundaries
+## Safety boundaries
 
-- `runtime/` and `chrome-profile/` must stay gitignored.
-- Do not commit real Chrome profile data, cookies, or credentials.
-- Extension is local-only; no production store keys should be added.
+- **Do NOT** commit the Chrome profile workspace or `runtime/` directory.
+- **Do NOT** sync cookies, login data, web data, or `.db`/`.pma` files.
+- Default sync mode is `metadata-only`. Changing to `full` requires explicit human review.
+- Keep `BLACKJACKAL_CHROME_PATH` local; do not hardcode personal paths in committed files.
 
-## Status
+## Current status
 
-Active. Safe to iterate on extension source and scripts.
+Active scaffold. Makefile and scripts are functional. Extension implementation is expected in `src/`.

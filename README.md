@@ -1,73 +1,66 @@
 # Blackjackal
 
-A Chrome extension and automation toolkit for browser-based workflow assistance.
+> A reproducible development workspace for tracking and managing Chrome extension projects — without leaking sensitive browser data into version control.
 
-## What This Does
+**Tech stack:** Bash · Make · Chrome Extension APIs
 
-Blackjackal is a Chrome extension project with supporting scripts and tooling. It provides browser-side automation, workflow helpers, and integration utilities that run inside Chrome via an extension manifest.
+*[Agent collaborators: see [AGENTS.md](AGENTS.md)]*
 
-The project keeps source code in `src/` (version controlled) and runtime state in a local Chrome workspace (gitignored, synced via `make sync`).
+## What this does
 
-## Quick Start
+Blackjackal provides a clean, safe boundary between your Chrome extension source code and your local Chrome profile data. Source lives in `src/` and is version-controlled; runtime browser state stays in a local Chrome workspace and is never committed. Use `make sync` to extract only safe metadata (like extension manifest versions) when you need to inspect your runtime environment.
+
+## Quick start
 
 ```bash
-# Clone and setup
+# Clone
 git clone https://github.com/arigatoexpress/blackjackal.git
 cd blackjackal
+
+# Initialize dev environment (idempotent)
 make setup
 
-# Verify everything is in place
+# Verify structure and prerequisites
 make verify
 
-# Sync runtime state from Chrome workspace
+# Sync safe metadata from Chrome workspace
 make sync
 ```
 
-## Project Structure
+## Available commands
 
+| Command | What it does |
+|---------|--------------|
+| `make setup` | Create directories, make scripts executable, check Chrome workspace |
+| `make verify` | Validate directory structure, script permissions, and Chrome workspace |
+| `make sync` | Copy safe metadata (e.g., `manifest.json`) from Chrome workspace to `runtime/` |
+| `make clean` | Remove generated runtime artifacts (safe — local state is preserved) |
+| `make check-env` | Confirm bash and git are available |
+| `make help` | Show all targets |
+
+## Project structure
+
+```text
+blackjackal/
+├── src/              # Source code (version controlled)
+├── scripts/          # Automation and utility scripts
+├── docs/             # Documentation
+├── config/           # Configuration templates
+├── runtime/          # Runtime data (gitignored — synced from Chrome workspace)
+└── tests/            # Test suites
 ```
-src/              # Extension source code (version controlled)
-scripts/          # Automation and utility scripts
-docs/             # Documentation
-config/           # Configuration templates
-runtime/          # Runtime data (gitignored — synced from Chrome workspace)
-tests/            # Test suites
-```
-
-## Development Workflow
-
-1. Source code lives in `src/` — this is version controlled
-2. Chrome profile data lives in the local workspace — **never** commit this
-3. Use `make sync` to extract relevant state from Chrome workspace
-4. Use `make setup` to initialize a fresh development environment
-5. Use `make verify` to verify project structure and environment
-
-## Make Targets
-
-| Target | Description |
-|--------|-------------|
-| `make setup` | Initialize development environment |
-| `make sync` | Sync runtime state from Chrome workspace |
-| `make verify` | Verify project structure and environment |
-| `make check-env` | Check environment prerequisites |
-| `make clean` | Clean runtime artifacts (safe) |
-| `make help` | Show available targets |
 
 ## Configuration
 
-- `BLACKJACKAL_CHROME_PATH` — Override default Chrome workspace path
-- `config/chrome-workspace.conf` — Workspace and sync settings
+- **Environment variable:** `BLACKJACKAL_CHROME_PATH` — override the default Chrome workspace path (`/Users/aribs/.blackjackal-chrome`)
+- **Config file:** `config/chrome-workspace.conf` — workspace path, allowed sync paths, blocked paths, and sync mode
 
-## Tech Stack
+## Safety notes
 
-- JavaScript (Chrome Extension Manifest V3)
-- Shell scripts (automation)
-- Makefile (build orchestration)
+- The Chrome profile workspace (`runtime/`, `.blackjackal-chrome/`) is **gitignored** and must never be committed.
+- `make sync` runs in `metadata-only` mode by default. It copies only `manifest.json` and other non-sensitive files.
+- Blocked paths include cookies, login data, and local databases.
 
 ## Status
 
-Active development. Extension is local-only; no store deployment yet.
-
----
-
-*See [AGENTS.md](AGENTS.md) for agent collaboration notes.*
+Active scaffold. Makefile, scripts, and config are functional. Extension source code is expected in `src/`.
