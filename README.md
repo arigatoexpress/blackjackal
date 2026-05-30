@@ -1,34 +1,12 @@
 # Blackjackal
 
-Tracked project repo for Blackjackal.
+A Chrome extension and automation toolkit for browser-based workflow assistance.
 
-## Project Structure
+## What This Does
 
-```
-blackjackal/
-├── src/                    # Source code (extension, scripts, tools)
-├── scripts/                # Automation and utility scripts
-├── docs/                   # Documentation
-├── config/                 # Configuration templates
-├── runtime/                # Runtime data (gitignored - synced from Chrome workspace)
-│   └── chrome-profile/     # Chrome extension state (local only)
-└── tests/                  # Test suites
-```
+Blackjackal is a Chrome extension project with supporting scripts and tooling. It provides browser-side automation, workflow helpers, and integration utilities that run inside Chrome via an extension manifest.
 
-## Chrome Workspace
-
-The canonical runtime data source remains at:
-`/Users/aribs/.blackjackal-chrome`
-
-This Chrome profile workspace is **not** committed to git. Use the sync script to extract relevant state.
-
-## Development Workflow
-
-1. Source code lives in `src/` - this is version controlled
-2. Chrome profile data lives in the local workspace - **never** commit this
-3. Use `make sync` to extract relevant state from Chrome workspace
-4. Use `make setup` to initialize a fresh development environment
-5. Use `make verify` to verify project structure and environment
+The project keeps source code in `src/` (version controlled) and runtime state in a local Chrome workspace (gitignored, synced via `make sync`).
 
 ## Quick Start
 
@@ -45,7 +23,26 @@ make verify
 make sync
 ```
 
-## Available Make Targets
+## Project Structure
+
+```
+src/              # Extension source code (version controlled)
+scripts/          # Automation and utility scripts
+docs/             # Documentation
+config/           # Configuration templates
+runtime/          # Runtime data (gitignored — synced from Chrome workspace)
+tests/            # Test suites
+```
+
+## Development Workflow
+
+1. Source code lives in `src/` — this is version controlled
+2. Chrome profile data lives in the local workspace — **never** commit this
+3. Use `make sync` to extract relevant state from Chrome workspace
+4. Use `make setup` to initialize a fresh development environment
+5. Use `make verify` to verify project structure and environment
+
+## Make Targets
 
 | Target | Description |
 |--------|-------------|
@@ -58,15 +55,19 @@ make sync
 
 ## Configuration
 
-Environment variables:
-- `BLACKJACKAL_CHROME_PATH` - Override default Chrome workspace path
+- `BLACKJACKAL_CHROME_PATH` — Override default Chrome workspace path
+- `config/chrome-workspace.conf` — Workspace and sync settings
 
-Configuration file:
-- `config/chrome-workspace.conf` - Workspace and sync settings
+## Tech Stack
 
-## Reproducibility
+- JavaScript (Chrome Extension Manifest V3)
+- Shell scripts (automation)
+- Makefile (build orchestration)
 
-This project uses deterministic build targets via Makefile:
-- `make setup` is idempotent - can be run multiple times safely
-- `make verify` validates all expected directories and files
-- `make sync` produces consistent output structure given the same input
+## Status
+
+Active development. Extension is local-only; no store deployment yet.
+
+---
+
+*See [AGENTS.md](AGENTS.md) for agent collaboration notes.*
